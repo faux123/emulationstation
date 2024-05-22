@@ -529,10 +529,6 @@ int main(int argc, char* argv[])
 
 	bool running = true;
 
-	/* about to enter the main rendering loop, start with clean SDL Audio state */
-	if (AudioManager::getInstance()->isInitialized)
-		AudioManager::getInstance()->deinit();
-
 	while(running)
 	{
 
@@ -582,12 +578,18 @@ int main(int argc, char* argv[])
 		/* and flush out all outstanding log buffers */
 		Log::flush();
 
+		/* check if sound is still playing */
+		if (!AudioManager::getInstance()->isAnySoundPlaying()) {
+			/* if not, stop all sound and release the resources */
+			AudioManager::getInstance()->stop();
+		}
+
 		/* calculate time remaing based on 30 Hz (33.3 ms)*/
 		curTime = SDL_GetTicks();
 		deltaTime = curTime - frameStart_time;
 
-		/* try to run at around 15 Hz, if nothing happens */
-		if (deltaTime < 60 && deltaTime >= 1)
+		/* try to run at around 30 Hz, if nothing happens */
+		if (deltaTime < 30 && deltaTime >= 1)
 		{
 
 			// PowerSaver can push events to exit SDL_WaitEventTimeout immediatly

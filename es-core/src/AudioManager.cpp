@@ -141,6 +141,14 @@ void AudioManager::stop()
 			sSoundVector[i]->stop();
 }
 
+bool AudioManager::isAnySoundPlaying()
+{
+	for (unsigned int i = 0; i < sSoundVector.size(); i++)
+		if (sSoundVector.at(i)->isPlaying())
+			return true;
+	return false;
+}
+
 // batocera
 void AudioManager::getMusicIn(const std::string &path, std::vector<std::string>& all_matching_files)
 {

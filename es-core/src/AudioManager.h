@@ -46,6 +46,8 @@ public:
 	void play();
 	void stop();
 
+	bool isAnySoundPlaying();
+
 	// batocera
 	void playRandomMusic(bool continueIfPlaying = true);
 	void stopMusic(bool fadeOut=true);

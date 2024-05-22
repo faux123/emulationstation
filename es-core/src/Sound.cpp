@@ -107,6 +107,6 @@ void Sound::stop()
 	if (mPlayingChannel < 0)
 		return;
 
-	//Mix_HaltChannel(mPlayingChannel);
+	Mix_HaltChannel(mPlayingChannel);
 	mPlayingChannel = -1;
 }
