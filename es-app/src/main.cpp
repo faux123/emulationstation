@@ -529,6 +529,10 @@ int main(int argc, char* argv[])
 
 	bool running = true;
 
+	/* about to enter the main rendering loop, start with clean SDL Audio state */
+	AudioManager::getInstance()->stop();
+	AudioManager::getInstance()->stopMusic();
+
 	while(running)
 	{
 
@@ -585,6 +589,10 @@ int main(int argc, char* argv[])
 		/* try to run at around 30 Hz, if nothing happens */
 		if (deltaTime < 30 && deltaTime >= 1)
 		{
+			/* we are entering idle state, so again close out all audio streams */
+			AudioManager::getInstance()->stop();
+			AudioManager::getInstance()->stopMusic();
+
 			// PowerSaver can push events to exit SDL_WaitEventTimeout immediatly
 			// Reset this event's state
 			TRYCATCH("resetRefreshEvent", PowerSaver::resetRefreshEvent());
