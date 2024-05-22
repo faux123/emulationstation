@@ -574,10 +574,6 @@ int main(int argc, char* argv[])
 		if(deltaTime < 0)
 			deltaTime = 1000;
 
-		/* about to update SDL, so restore audio */
-		if (!AudioManager::getInstance()->isInitialized)
-			AudioManager::getInstance()->init();
-
 		/* update and render */
 		TRYCATCH("Window.update" ,window.update(deltaTime))	
 		TRYCATCH("Window.render", window.render())
@@ -593,9 +589,6 @@ int main(int argc, char* argv[])
 		/* try to run at around 15 Hz, if nothing happens */
 		if (deltaTime < 60 && deltaTime >= 1)
 		{
-			/* about to enter the idle portion of the rendering loop, teardown any audio */
-			if (AudioManager::getInstance()->isInitialized)
-				AudioManager::getInstance()->deinit();
 
 			// PowerSaver can push events to exit SDL_WaitEventTimeout immediatly
 			// Reset this event's state
