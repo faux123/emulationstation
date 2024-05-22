@@ -590,8 +590,8 @@ int main(int argc, char* argv[])
 		curTime = SDL_GetTicks();
 		deltaTime = curTime - frameStart_time;
 
-		/* try to run at around 30 Hz, if nothing happens */
-		if (deltaTime < 30 && deltaTime >= 1)
+		/* try to run at around 15 Hz, if nothing happens */
+		if (deltaTime < 60 && deltaTime >= 1)
 		{
 			/* about to enter the idle portion of the rendering loop, teardown any audio */
 			if (AudioManager::getInstance()->isInitialized)
