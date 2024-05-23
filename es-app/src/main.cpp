@@ -579,15 +579,6 @@ int main(int argc, char* argv[])
 		/* and flush out all outstanding log buffers */
 		Log::flush();
 
-		/* check if any sound is still playing */
-		if (!AudioManager::getInstance()->isAnySoundPlaying()) {
-			/* if not, tear down SDL Audio subsystem */
-			SDL_QuitSubSystem(SDL_INIT_AUDIO);
-		} else
-		{
-			SDL_InitSubSystem(SDL_INIT_AUDIO);
-		}
-
 		/* calculate time remaing based on 30 Hz (33.3 ms)*/
 		curTime = SDL_GetTicks();
 		deltaTime = curTime - frameStart_time;
@@ -609,7 +600,7 @@ int main(int argc, char* argv[])
 			if (event.type == SDL_QUIT)
 				running = false;
 		}
-	} /* while (running) */
+	} /* while (running) MAIN RENDERING LOOP */
 
 	if (isFastShutdown())
 		Settings::getInstance()->setBool("IgnoreGamelist", true);

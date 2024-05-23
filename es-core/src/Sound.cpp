@@ -86,6 +86,11 @@ void Sound::deinit()
 	mSampleData = nullptr;	
 }
 
+void Sound::mixEnd_callback(int channel)
+{
+	Mix_HaltChannel(channel);
+}
+
 void Sound::play()
 {
 	if (mSampleData == nullptr)
@@ -95,6 +100,7 @@ void Sound::play()
 		return;
 
 	mPlayingChannel = Mix_PlayChannel(-1, mSampleData, 0);
+	Mix_ChannelFinished(mixEnd_callback);
 }
 
 bool Sound::isPlaying() const
@@ -107,6 +113,6 @@ void Sound::stop()
 	if (mPlayingChannel < 0)
 		return;
 
-	Mix_HaltChannel(mPlayingChannel);
+	//Mix_HaltChannel(mPlayingChannel);
 	mPlayingChannel = -1;
 }
