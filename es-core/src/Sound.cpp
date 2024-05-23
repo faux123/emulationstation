@@ -74,6 +74,8 @@ void Sound::init()
 		LOG(LogError) << "Error loading sound \"" << mPath << "\"!\n" << "	" << SDL_GetError();
 		return;
 	}
+	LOG(LogError) << "Sound::init";
+
 }
 
 void Sound::deinit()
@@ -83,12 +85,15 @@ void Sound::deinit()
 
 	stop();
 	Mix_FreeChunk(mSampleData);
-	mSampleData = nullptr;	
+	mSampleData = nullptr;
+	LOG(LogError) << "Sound::deinit";
+
 }
 
 void Sound::mixEnd_callback(int channel)
 {
 	//halt all channels
+	LOG(LogError) << "Sound::mixEnd_callback";
 	Mix_HaltChannel(-1);
 }
 
@@ -102,6 +107,8 @@ void Sound::play()
 
 	mPlayingChannel = Mix_PlayChannel(-1, mSampleData, 0);
 	Mix_ChannelFinished(mixEnd_callback);
+	LOG(LogError) << "Sound::play()";
+
 }
 
 bool Sound::isPlaying() const
