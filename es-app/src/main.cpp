@@ -37,6 +37,7 @@
 #include "RetroAchievements.h"
 #include "TextToSpeech.h"
 #include "BrightnessControl.h"
+#include <SDL.h>
 
 static std::string gPlayVideo;
 static int gPlayVideoDuration = 0;
@@ -578,10 +579,13 @@ int main(int argc, char* argv[])
 		/* and flush out all outstanding log buffers */
 		Log::flush();
 
-		/* check if sound is still playing */
+		/* check if any sound is still playing */
 		if (!AudioManager::getInstance()->isAnySoundPlaying()) {
-			/* if not, stop all sound and release the resources */
-			AudioManager::getInstance()->stop();
+			/* if not, tear down SDL Audio subsystem */
+			SDL_QuitSubSystem(SDL_INIT_AUDIO);
+		} else
+		{
+			SDL_InitSubSystem(SDL_INIT_AUDIO);
 		}
 
 		/* calculate time remaing based on 30 Hz (33.3 ms)*/
