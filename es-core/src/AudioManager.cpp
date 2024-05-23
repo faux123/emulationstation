@@ -144,6 +144,7 @@ void AudioManager::unregisterSound(std::shared_ptr<Sound> & sound)
 
 void AudioManager::play()
 {
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
 	getInstance();
 }
 
@@ -153,6 +154,7 @@ void AudioManager::stop()
 	for (unsigned int i = 0; i < sSoundVector.size(); i++)
 		if (sSoundVector.at(i)->isPlaying())
 			sSoundVector[i]->stop();
+	Mix_CloseAudio();
 }
 
 bool AudioManager::isAnySoundPlaying()
