@@ -88,7 +88,8 @@ void Sound::deinit()
 
 void Sound::mixEnd_callback(int channel)
 {
-	Mix_HaltChannel(channel);
+	//halt all channels
+	Mix_HaltChannel(-1);
 }
 
 void Sound::play()
