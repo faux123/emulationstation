@@ -107,6 +107,20 @@ void AudioManager::deinit()
 	LOG(LogInfo) << "SDL AUDIO Deinitialized";
 }
 
+void AudioManager::freeSound()
+{
+	if (!mInitialized)
+		return;
+
+	LOG(LogDebug) << "AudioManager::deinit";
+
+	mInitialized = false;
+
+	// Free known sounds from memory
+	for (unsigned int i = 0; i < sSoundVector.size(); i++)
+		sSoundVector[i]->deinit();
+}
+
 void AudioManager::registerSound(std::shared_ptr<Sound> & sound)
 {
 	getInstance();

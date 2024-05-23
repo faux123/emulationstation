@@ -39,6 +39,7 @@ public:
 	
 	void init();
 	void deinit();
+	void freeSound();
 
 	void registerSound(std::shared_ptr<Sound> & sound);
 	void unregisterSound(std::shared_ptr<Sound> & sound);
