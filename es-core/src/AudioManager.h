@@ -39,15 +39,18 @@ public:
 	
 	void init();
 	void deinit();
-	void freeSound();
+	void tearDown();
+
+	int openMixerDevice();
+	void closeMixerDevice();
 
 	void registerSound(std::shared_ptr<Sound> & sound);
 	void unregisterSound(std::shared_ptr<Sound> & sound);
 
-	void play();
-	void stop();
+//	void playSound();
+	void stopSound();
 
-	bool isAnySoundPlaying();
+	bool isSoundPlaying();
 
 	// batocera
 	void playRandomMusic(bool continueIfPlaying = true);
@@ -77,6 +80,7 @@ private:
 	void setSongName(const std::string& song);
 
 	bool mSongNameChanged;
+	void freeSounds();
 };
 
 #endif // ES_CORE_AUDIO_MANAGER_H

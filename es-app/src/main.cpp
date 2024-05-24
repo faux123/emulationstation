@@ -476,7 +476,6 @@ int main(int argc, char* argv[])
 
 	MameNames::init();
 
-
 	const char* errorMsg = NULL;
 	if(!loadSystemConfigFile(&window, &errorMsg))
 	{
@@ -514,13 +513,13 @@ int main(int argc, char* argv[])
 	// Create a flag in  temporary directory to signal READY state
 	ApiSystem::getInstance()->setReadyFlag();
 
-	// Play music
-	AudioManager::getInstance()->init();
+	// Play music (as part of ES startup)
+//	AudioManager::getInstance()->init();
 
-	if (ViewController::get()->getState().viewing == ViewController::GAME_LIST || ViewController::get()->getState().viewing == ViewController::SYSTEM_SELECT)
-		AudioManager::getInstance()->changePlaylist(ViewController::get()->getState().getSystem()->getTheme());
-	else
-		AudioManager::getInstance()->playRandomMusic();
+//	if (ViewController::get()->getState().viewing == ViewController::GAME_LIST || ViewController::get()->getState().viewing == ViewController::SYSTEM_SELECT)
+//		AudioManager::getInstance()->changePlaylist(ViewController::get()->getState().getSystem()->getTheme());
+//	else
+//		AudioManager::getInstance()->playRandomMusic();
 
 	int lastTime = SDL_GetTicks();
 	int ps_time = SDL_GetTicks();
@@ -532,7 +531,6 @@ int main(int argc, char* argv[])
 
 	while(running)
 	{
-
 		SDL_Event event;
 
 		/* grab inital timestamp */
@@ -579,16 +577,12 @@ int main(int argc, char* argv[])
 		/* and flush out all outstanding log buffers */
 		Log::flush();
 
-		/* release all mixer chunks */
-		if (!AudioManager::getInstance()->isAnySoundPlaying())
-			AudioManager::getInstance()->stop();
-
 		/* calculate time remaing based on 30 Hz (33.3 ms)*/
 		curTime = SDL_GetTicks();
 		deltaTime = curTime - frameStart_time;
 
-		/* try to run at around 30 Hz, if nothing happens */
-		if (deltaTime < 30 && deltaTime >= 1)
+		/* try to run at around 40 Hz, if nothing happens */
+		if (deltaTime < 22 && deltaTime >= 1)
 		{
 
 			// PowerSaver can push events to exit SDL_WaitEventTimeout immediatly

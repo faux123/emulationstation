@@ -95,6 +95,7 @@ void Sound::mixEnd_callback(int channel)
 	//halt all channels
 	LOG(LogError) << "Sound::mixEnd_callback";
 	Mix_HaltChannel(-1);
+	//Mix_CloseAudio();
 }
 
 void Sound::play()
@@ -105,6 +106,8 @@ void Sound::play()
 	if (!Settings::getInstance()->getBool("EnableSounds"))
 		return;
 
+	//Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
+
 	mPlayingChannel = Mix_PlayChannel(-1, mSampleData, 0);
 	Mix_ChannelFinished(mixEnd_callback);
 	LOG(LogError) << "Sound::play()";
@@ -112,7 +115,7 @@ void Sound::play()
 }
 
 bool Sound::isPlaying() const
-{	
+{
 	return (mPlayingChannel >= 0);
 }
 
@@ -123,4 +126,5 @@ void Sound::stop()
 
 	//Mix_HaltChannel(mPlayingChannel);
 	mPlayingChannel = -1;
+	LOG(LogError) << "Sound::stop()";
 }

@@ -3785,6 +3785,14 @@ void GuiMenu::openSoundSettings()
 			Settings::getInstance()->setPowerSaverMode("default");
 			PowerSaver::init();
 		}
+
+		if (sounds_enabled->getState()) 
+			/* user has toggled the sound option to on, so make sure audioManager is alive */
+			AudioManager::getInstance()->init();
+		else
+			/* user has toggled the sound option to off, so make sure audioManager is alive */
+			AudioManager::getInstance()->deinit();
+
 	    Settings::getInstance()->setBool("EnableSounds", sounds_enabled->getState());
 	  });
 

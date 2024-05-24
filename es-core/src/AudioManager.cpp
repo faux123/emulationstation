@@ -51,6 +51,16 @@ bool AudioManager::isInitialized()
 	return sInstance->mInitialized;
 }
 
+int AudioManager::openMixerDevice()
+{
+	return Mix_OpenAudio(48000, MIX_DEFAULT_FORMAT, 2, 4096);
+}
+
+void AudioManager::closeMixerDevice()
+{
+	Mix_CloseAudio();
+}
+
 void AudioManager::init()
 {
 	if (mInitialized)
@@ -66,9 +76,12 @@ void AudioManager::init()
 		return;
 	}
 
+	int mixerOpened;
 	// Open the audio device and pause
-	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) < 0)
+	if (mixerOpened = openMixerDevice() < 0)
+	{
 		LOG(LogError) << "MUSIC Error - Unable to open SDLMixer audio: " << SDL_GetError() << std::endl;
+	}
 	else
 	{
 		LOG(LogInfo) << "SDL AUDIO Initialized";
@@ -76,55 +89,66 @@ void AudioManager::init()
 
 		// Reload known sounds
 		for (unsigned int i = 0; i < sSoundVector.size(); i++)
+		{
 			sSoundVector[i]->init();
+			LOG(LogError) << "AudioManager::init (reload): " << i;
+		}
+		Mix_HaltChannel(-1);
 	}
+
+	LOG(LogError) << "AudioManager::init";
+
+}
+
+void AudioManager::freeSounds()
+{
+	// Free known sounds from memory
+	for (unsigned int i = 0; i < sSoundVector.size(); i++)
+		sSoundVector[i]->deinit();
 }
 
 void AudioManager::deinit()
 {
+	LOG(LogDebug) << "AudioManager::deinit";
+
+	freeSounds();
+	tearDown();
+	
+	LOG(LogError) << "AudioManager::deinit";
+
+	LOG(LogInfo) << "SDL AUDIO Deinitialized";
+}
+
+void AudioManager::tearDown()
+{
 	if (!mInitialized)
 		return;
 
-	LOG(LogDebug) << "AudioManager::deinit";
+	LOG(LogDebug) << "AudioManager::tearDown";
 
 	mInitialized = false;
 
 	//stop all playback
-	stop();
+	stopSound();
 	stopMusic();
-
-	// Free known sounds from memory
-	for (unsigned int i = 0; i < sSoundVector.size(); i++)
-		sSoundVector[i]->deinit();
 
 	Mix_HookMusicFinished(nullptr);
 	Mix_HaltMusic();
 
 	//completely tear down SDL audio. else SDL hogs audio resources and emulators might fail to start...
-	Mix_CloseAudio();
+	closeMixerDevice();
 	SDL_QuitSubSystem(SDL_INIT_AUDIO);
 
+	LOG(LogError) << "AudioManager::tearDown";
+
 	LOG(LogInfo) << "SDL AUDIO Deinitialized";
-}
-
-void AudioManager::freeSound()
-{
-	if (!mInitialized)
-		return;
-
-	LOG(LogDebug) << "AudioManager::deinit";
-
-	mInitialized = false;
-
-	// Free known sounds from memory
-	for (unsigned int i = 0; i < sSoundVector.size(); i++)
-		sSoundVector[i]->deinit();
 }
 
 void AudioManager::registerSound(std::shared_ptr<Sound> & sound)
 {
 	getInstance();
 	sSoundVector.push_back(sound);
+	LOG(LogError) << "AudioManager::registerSound";
 }
 
 void AudioManager::unregisterSound(std::shared_ptr<Sound> & sound)
@@ -136,36 +160,41 @@ void AudioManager::unregisterSound(std::shared_ptr<Sound> & sound)
 		{
 			sSoundVector[i]->stop();
 			sSoundVector.erase(sSoundVector.cbegin() + i);
+			LOG(LogError) << "AudioManager::unregisterSound (erase): " << i;
 			return;
 		}
 	}
 	LOG(LogWarning) << "AudioManager Error - tried to unregister a sound that wasn't registered!";
 }
 
-void AudioManager::play()
-{
-	LOG(LogError) << "AudioManager::play";
-	getInstance();
-}
+// void AudioManager::playSound()
+// {
+// 	LOG(LogError) << "AudioManager::play";
+// 	getInstance();
+// }
 
-void AudioManager::stop()
+void AudioManager::stopSound()
 {
+	LOG(LogError) << "AudioManager::stop";
+
 	// Stop playing all Sounds
 	for (unsigned int i = 0; i < sSoundVector.size(); i++)
+	{
 		if (sSoundVector.at(i)->isPlaying())
 			sSoundVector[i]->stop();
-	Mix_CloseAudio();
+		LOG(LogError) << "AudioManager::stopSound: " << i;
+	}
 }
 
-bool AudioManager::isAnySoundPlaying()
-{
-	for (unsigned int i = 0; i < sSoundVector.size(); i++)
-		if (sSoundVector.at(i)->isPlaying()) {
-			return true;		
-		}
-	LOG(LogError) << "AudioManager::isAnySoundPlaying - no sound playing";
-	return false;
-}
+bool AudioManager::isSoundPlaying()
+ {
+ 	for (unsigned int i = 0; i < sSoundVector.size(); i++)
+ 		if (sSoundVector.at(i)->isPlaying()) {
+ 			return true;		
+ 		}
+ 	LOG(LogError) << "AudioManager::isAnySoundPlaying - no sound playing";
+ 	return false;
+ }
 
 // batocera
 void AudioManager::getMusicIn(const std::string &path, std::vector<std::string>& all_matching_files)
@@ -263,6 +292,7 @@ void AudioManager::playMusic(std::string path)
 
 	mCurrentMusicPath = path;
 	Mix_HookMusicFinished(AudioManager::musicEnd_callback);
+	LOG(LogError) << "AudioManager::playMusic";
 }
 
 // batocera
@@ -296,6 +326,7 @@ void AudioManager::stopMusic(bool fadeOut)
 	Mix_FreeMusic(mCurrentMusic);
 	mCurrentMusicPath = "";
 	mCurrentMusic = NULL;
+	LOG(LogError) << "AudioManager::stopMusic";
 }
 
 // Fast string hash in order to use strings in switch/case
@@ -565,4 +596,5 @@ void AudioManager::update(int deltaTime)
 
 		Mix_VolumeMusic((int)sInstance->mMusicVolume);
 	}
+	LOG(LogError) << "AudioManager::update: " << deltaTime;
 }
