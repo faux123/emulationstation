@@ -577,6 +577,9 @@ int main(int argc, char* argv[])
 		/* and flush out all outstanding log buffers */
 		Log::flush();
 
+//		if (!Settings::getInstance()->getBool("EnableSounds"))
+//			AudioManager::getInstance()->deinit();
+
 		/* calculate time remaing based on 30 Hz (33.3 ms)*/
 		curTime = SDL_GetTicks();
 		deltaTime = curTime - frameStart_time;

@@ -175,7 +175,7 @@ void AudioManager::unregisterSound(std::shared_ptr<Sound> & sound)
 
 void AudioManager::stopSound()
 {
-	LOG(LogError) << "AudioManager::stop";
+	LOG(LogError) << "AudioManager::stopSound()";
 
 	// Stop playing all Sounds
 	for (unsigned int i = 0; i < sSoundVector.size(); i++)
@@ -596,5 +596,5 @@ void AudioManager::update(int deltaTime)
 
 		Mix_VolumeMusic((int)sInstance->mMusicVolume);
 	}
-	LOG(LogError) << "AudioManager::update: " << deltaTime;
+	//LOG(LogError) << "AudioManager::update: " << deltaTime;
 }

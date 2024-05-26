@@ -271,5 +271,7 @@ bool SystemConf::setBool(const std::string &name, bool value)
 	return Settings::getInstance()->setBool(mapSettingsName(name), value);
 #endif
 
+	/* automatically flush changes to file to prevent file corruptions due to HW resets or bugs */
+	saveSystemConf();
 	return set(name, value  ? "1" : "0");
 }

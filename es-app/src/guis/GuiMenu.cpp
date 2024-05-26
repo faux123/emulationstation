@@ -3790,10 +3790,11 @@ void GuiMenu::openSoundSettings()
 			/* user has toggled the sound option to on, so make sure audioManager is alive */
 			AudioManager::getInstance()->init();
 		else
-			/* user has toggled the sound option to off, so make sure audioManager is alive */
+			/* user has toggled the sound option to off, so make sure audioManager is torn down */
 			AudioManager::getInstance()->deinit();
 
 	    Settings::getInstance()->setBool("EnableSounds", sounds_enabled->getState());
+		Settings::getInstance()->saveFile();
 	  });
 
         auto batteryWarning = std::make_shared<SwitchComponent>(mWindow);

@@ -10,8 +10,10 @@ std::map< std::string, std::shared_ptr<Sound> > Sound::sMap;
 std::shared_ptr<Sound> Sound::get(const std::string& path)
 {
 	auto it = sMap.find(path);
-	if (it != sMap.cend())
+	if (it != sMap.cend()) {
+		LOG(LogError) << "Sound::get (found in map)";
 		return it->second;
+	}
 
 	std::shared_ptr<Sound> sound = std::shared_ptr<Sound>(new Sound(path));
 
@@ -19,7 +21,10 @@ std::shared_ptr<Sound> Sound::get(const std::string& path)
 	{
 		AudioManager::getInstance()->registerSound(sound);
 		sMap[path] = sound;
+		LOG(LogError) << "Sound::get: " << path;
 	}
+	else
+		LOG(LogError) << "Sound::get (AM not initialized)";
 
 	return sound;
 }
@@ -41,6 +46,7 @@ std::shared_ptr<Sound> Sound::getFromTheme(const std::shared_ptr<ThemeData>& the
 Sound::Sound(const std::string & path) : mSampleData(NULL), mPlayingChannel(-1)
 {
 	loadFile(path);
+	LOG(LogError) << "Sound::new Sound instantiation";
 }
 
 Sound::~Sound()
@@ -52,6 +58,7 @@ void Sound::loadFile(const std::string & path)
 {
 	mPath = path;
 	init();
+	LOG(LogError) << "Sound::loadFile";
 }
 
 void Sound::init()
@@ -59,13 +66,21 @@ void Sound::init()
 	deinit();
 
 	if (!AudioManager::isInitialized())
+	{
+		LOG(LogError) << "Sound::init: AM not initialized";
 		return;
+	}
 
 	if (mPath.empty() || !Utils::FileSystem::exists(mPath))
+	{
+		LOG(LogError) << "Sound::init: Empty path";
 		return;
-
+	}
 	if (!Settings::getInstance()->getBool("EnableSounds"))
+	{
+		LOG(LogError) << "Sound::init: Sound not enabled";
 		return;
+	}
 
 	//load wav file via SDL
 	mSampleData = Mix_LoadWAV(mPath.c_str());
@@ -101,7 +116,10 @@ void Sound::mixEnd_callback(int channel)
 void Sound::play()
 {
 	if (mSampleData == nullptr)
+	{
+		LOG(LogError) << "Sound::play(): nullptr";
 		return;
+	}
 
 	if (!Settings::getInstance()->getBool("EnableSounds"))
 		return;
