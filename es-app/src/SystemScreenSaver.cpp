@@ -84,7 +84,7 @@ void SystemScreenSaver::startScreenSaver()
 
 	stopScreenSaver();
 
-	if (!loadingNext && Settings::getInstance()->getBool("StopMusicOnScreenSaver")) //(Settings::getInstance()->getBool("VideoAudio") && !Settings::getInstance()->getBool("ScreenSaverVideoMute")))
+	if (!loadingNext && Settings::getInstance()->getBool("")) //(Settings::getInstance()->getBool("VideoAudio") && !Settings::getInstance()->getBool("ScreenSaverVideoMute")))
 		AudioManager::getInstance()->deinit();
 
 	std::string screensaver_behavior = Settings::getInstance()->getString("ScreenSaverBehavior");
@@ -183,8 +183,6 @@ void SystemScreenSaver::startScreenSaver()
 	// No videos. Just use a standard screensaver (black screen)
 	mState = STATE_SCREENSAVER_ACTIVE;
 	mCurrentGame = NULL;
-	if (AudioManager::isInitialized())
-		AudioManager::getInstance()->deinit();
 
 }
 
@@ -217,7 +215,7 @@ void SystemScreenSaver::stopScreenSaver()
 	PowerSaver::runningScreenSaver(false);
 
 	// Exiting screen saver -> Restore sound
-	if (isExitingScreenSaver && Settings::getInstance()->getBool("StopMusicOnScreenSaver")) //isVideoScreenSaver && Settings::getInstance()->getBool("VideoAudio") && !Settings::getInstance()->getBool("ScreenSaverVideoMute"))
+	if (isExitingScreenSaver && Settings::getInstance()->getBool("EnableSounds")) //isVideoScreenSaver && Settings::getInstance()->getBool("VideoAudio") && !Settings::getInstance()->getBool("ScreenSaverVideoMute"))
 	{
 		AudioManager::getInstance()->init();
 
@@ -229,10 +227,6 @@ void SystemScreenSaver::stopScreenSaver()
 				AudioManager::getInstance()->playRandomMusic();
 		}
 	}
-
-	/* coming out of black screensaver */
-	if (!AudioManager::isInitialized())
-		AudioManager::getInstance()->init();
 }
 
 void SystemScreenSaver::renderScreenSaver()

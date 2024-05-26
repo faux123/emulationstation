@@ -113,7 +113,7 @@ void AudioManager::deinit()
 
 	freeSounds();
 	tearDown();
-	
+
 	LOG(LogError) << "AudioManager::deinit";
 
 	LOG(LogInfo) << "SDL AUDIO Deinitialized";

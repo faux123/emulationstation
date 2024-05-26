@@ -60,9 +60,9 @@ GuiGeneralScreensaverOptions::GuiGeneralScreensaverOptions(Window* window, int s
 	if (Settings::getInstance()->getBool("audio.bgmusic"))
 	{
 		auto ctlStopMusic = std::make_shared<SwitchComponent>(mWindow);
-		ctlStopMusic->setState(Settings::getInstance()->getBool("StopMusicOnScreenSaver"));
+		ctlStopMusic->setState(Settings::getInstance()->getBool("EnableSounds"));
 		addWithLabel(_("STOP MUSIC ON SCREENSAVER"), ctlStopMusic);
-		addSaveFunc([ctlStopMusic] { Settings::getInstance()->setBool("StopMusicOnScreenSaver", ctlStopMusic->getState()); });
+		addSaveFunc([ctlStopMusic] { Settings::getInstance()->setBool("EnableSounds", ctlStopMusic->getState()); });
 	}
 
 	if (ssBehavior == "random video")

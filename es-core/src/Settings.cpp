@@ -171,7 +171,7 @@ void Settings::setDefaults()
 	mBoolMap["StretchVideoOnScreenSaver"] = false;
 	mStringMap["PowerSaverMode"] = "default"; // batocera
 
-	mBoolMap["StopMusicOnScreenSaver"] = false;
+	//mBoolMap["StopMusicOnScreenSaver"] = false;
 
 	mBoolMap["RetroachievementsMenuitem"] = true;
 	mIntMap["ScreenSaverSwapImageTimeout"] = 10000;
