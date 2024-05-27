@@ -76,11 +76,11 @@ void Sound::init()
 		LOG(LogError) << "Sound::init: Empty path";
 		return;
 	}
-	if (!Settings::getInstance()->getBool("EnableSounds"))
-	{
-		LOG(LogError) << "Sound::init: Sound not enabled";
-		return;
-	}
+	//if (!Settings::getInstance()->getBool("EnableSounds"))
+	//{
+	//	LOG(LogError) << "Sound::init: Sound not enabled";
+	//	return;
+	//}
 
 	//load wav file via SDL
 	mSampleData = Mix_LoadWAV(mPath.c_str());

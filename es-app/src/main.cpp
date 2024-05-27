@@ -514,12 +514,15 @@ int main(int argc, char* argv[])
 	ApiSystem::getInstance()->setReadyFlag();
 
 	// Play music (as part of ES startup)
-//	AudioManager::getInstance()->init();
+	if (Settings::getInstance()->getBool("EnableSounds"))
+	{
+		AudioManager::getInstance()->init();
 
-//	if (ViewController::get()->getState().viewing == ViewController::GAME_LIST || ViewController::get()->getState().viewing == ViewController::SYSTEM_SELECT)
-//		AudioManager::getInstance()->changePlaylist(ViewController::get()->getState().getSystem()->getTheme());
-//	else
-//		AudioManager::getInstance()->playRandomMusic();
+		if (ViewController::get()->getState().viewing == ViewController::GAME_LIST || ViewController::get()->getState().viewing == ViewController::SYSTEM_SELECT)
+			AudioManager::getInstance()->changePlaylist(ViewController::get()->getState().getSystem()->getTheme());
+		else
+			AudioManager::getInstance()->playRandomMusic();
+	}
 
 	int lastTime = SDL_GetTicks();
 	int ps_time = SDL_GetTicks();
