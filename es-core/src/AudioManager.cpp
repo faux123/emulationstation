@@ -187,14 +187,14 @@ void AudioManager::stopSound()
 }
 
 bool AudioManager::isSoundPlaying()
- {
- 	for (unsigned int i = 0; i < sSoundVector.size(); i++)
- 		if (sSoundVector.at(i)->isPlaying()) {
- 			return true;		
- 		}
- 	LOG(LogError) << "AudioManager::isAnySoundPlaying - no sound playing";
- 	return false;
- }
+{
+	for (unsigned int i = 0; i < sSoundVector.size(); i++)
+		if (sSoundVector.at(i)->isPlaying()) {
+			return true;
+		}
+	LOG(LogError) << "AudioManager::isAnySoundPlaying - no sound playing";
+	return false;
+}
 
 // batocera
 void AudioManager::getMusicIn(const std::string &path, std::vector<std::string>& all_matching_files)

@@ -84,7 +84,7 @@ void SystemScreenSaver::startScreenSaver()
 
 	stopScreenSaver();
 
-	if (!loadingNext && Settings::getInstance()->getBool("")) //(Settings::getInstance()->getBool("VideoAudio") && !Settings::getInstance()->getBool("ScreenSaverVideoMute")))
+	if (!loadingNext && !Settings::getInstance()->getBool("EnableSounds")) //(Settings::getInstance()->getBool("VideoAudio") && !Settings::getInstance()->getBool("ScreenSaverVideoMute")))
 		AudioManager::getInstance()->deinit();
 
 	std::string screensaver_behavior = Settings::getInstance()->getString("ScreenSaverBehavior");

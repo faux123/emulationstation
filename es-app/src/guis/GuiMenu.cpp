@@ -3806,10 +3806,10 @@ void GuiMenu::openSoundSettings()
                 SystemConf::getInstance()->set("system.battery.warning", batteryWarningEnabled ? "1" : "0");
         });
 
-	auto video_audio = std::make_shared<SwitchComponent>(mWindow);
-	video_audio->setState(Settings::getInstance()->getBool("VideoAudio"));
-	s->addWithLabel(_("ENABLE VIDEO PREVIEW AUDIO"), video_audio);
-	s->addSaveFunc([video_audio] { Settings::getInstance()->setBool("VideoAudio", video_audio->getState()); });
+//	auto video_audio = std::make_shared<SwitchComponent>(mWindow);
+//	video_audio->setState(Settings::getInstance()->getBool("VideoAudio"));
+//	s->addWithLabel(_("ENABLE VIDEO PREVIEW AUDIO"), video_audio);
+//	s->addSaveFunc([video_audio] { Settings::getInstance()->setBool("VideoAudio", video_audio->getState()); });
 
     const std::string audioVDriverScript = "/usr/bin/audio_vdriver.sh";
     if (Utils::FileSystem::exists(audioVDriverScript)) {

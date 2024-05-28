@@ -332,7 +332,7 @@ void playVideo()
 		return;
 	}
 
-	Settings::getInstance()->setBool("VideoAudio", true);
+	//Settings::getInstance()->setBool("VideoAudio", true);
 
 	bool exitLoop = false;
 
